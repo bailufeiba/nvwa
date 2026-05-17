@@ -395,7 +395,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
                     resInfo[0] == EI18AssetType.SpriteFrame
                         ? `${url}/spriteFrame`
                         : url;
-                // eslint-disable-next-line unused-imports/no-unused-vars
+
                 self.getRes(assetUrl, resType, (err, assetData: Asset) => {
                     if (err) {
                         if (loadFinishedCallback) {

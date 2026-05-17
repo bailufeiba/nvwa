@@ -2,7 +2,7 @@ export enum EBundleName {
     NONE = ``,
     CN = `CN`,
     EN = `EN`,
-    Default = `EN`,
+    Default = `CN`,
 }
 
 export default class I18LanguageHelper {

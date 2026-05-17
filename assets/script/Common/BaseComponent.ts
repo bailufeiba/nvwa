@@ -32,6 +32,10 @@ export class BaseComponent extends Component {
         }
     }
 
+    public emitEvent(eventName: number | string, data?: any) {
+        EventManager.Inst.emitEvent(eventName, data);
+    }
+
     protected onDestroy(): void {
         const self = this;
         self.offEvent(self);

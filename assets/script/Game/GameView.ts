@@ -1,10 +1,10 @@
 ﻿import { _decorator } from "cc";
-import { BaseComponent } from "../Common/BaseComponent";
 import LouTi from "./LouTi";
+import { BaseView } from "../Common/BaseView";
 
 const { ccclass, property } = _decorator;
-@ccclass(`GameScene`)
-export default class GameScene extends BaseComponent {
+@ccclass(`GameView`)
+export default class GameScene extends BaseView {
     @property({ type: LouTi, visible: true })
     _louTi: LouTi | null = null;
 

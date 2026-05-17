@@ -1,5 +1,5 @@
 ﻿import { _decorator } from "cc";
-import LouTi from "./LouTi";
+import LouTi from "./Room/LouTi";
 import { BaseView } from "../Common/BaseView";
 
 const { ccclass, property } = _decorator;

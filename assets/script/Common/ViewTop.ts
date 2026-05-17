@@ -1,6 +1,6 @@
 import { _decorator, Label } from "cc";
 import { BaseComponent } from "./BaseComponent";
-import { EventName } from "./EventID";
+import { EventName } from "../Game/EventID";
 
 const { ccclass, property } = _decorator;
 @ccclass(`ViewTop`)

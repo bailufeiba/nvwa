@@ -1,7 +1,7 @@
 import { _decorator, Node } from "cc";
 import { BaseComponent } from "./Common/BaseComponent";
 import I18Mgr from "./i18/I18Mgr";
-import { EventName } from "./Common/EventID";
+import { EventName } from "./Game/EventID";
 
 const { ccclass, property } = _decorator;
 @ccclass(`StartScene`)

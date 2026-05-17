@@ -7,22 +7,20 @@ import { I18CmptPropertyBase, I18PropertyBase } from "./I18CmptProperty";
 
 const { ccclass, property } = _decorator;
 
-@ccclass('I18Pos')
+@ccclass(`I18Pos`)
 class I18Pos extends I18PropertyBase {
-    @property({type:Vec2, tooltip: "位置"})
-    pos: Vec2 = v2( 0, 0 );
+    @property({ type: Vec2, tooltip: `位置` })
+    pos: Vec2 = v2(0, 0);
 }
 
-@ccclass('I18CmptPos')
+@ccclass(`I18CmptPos`)
 export class I18CmptPos extends I18CmptPropertyBase {
+    @property({ type: [I18Pos], visible: true })
+    _property: Array<I18Pos> = [];
 
-    @property({ type:[I18Pos], visible: true })
-    _property :Array<I18Pos> = [];
-
-    onChangeProperty( proty: I18PropertyBase ){
+    onChangeProperty(proty: I18PropertyBase) {
         const self = this;
         const pos = (proty as I18Pos).pos;
-        self.node.setPosition( v3( pos.x, pos.y ) );
+        self.node.setPosition(v3(pos.x, pos.y));
     }
-
 }

@@ -1,7 +1,5 @@
 import { isValid } from "cc";
 
-import { Singleton } from "./Singleton";
-
 /** 单个监听器包装，保存回调及其状态。 */
 class Listener {
     private _target: any = null;
@@ -71,10 +69,10 @@ class Listener {
 /** 同一事件名下的监听集合与分发控制。 */
 class LisenterGroup {
     private _eventName: number | string = 0;
-    private listeners: Listener[] = [];
-    private arrAddListeners: Listener[] = [];
-    private bDispatch: boolean = false;
-    private eventDatas: any[] = [];
+    private _listeners: Listener[] = [];
+    private _arrAddListeners: Listener[] = [];
+    private _bDispatch: boolean = false;
+    private _eventDatas: any[] = [];
 
     /**
      * 创建事件组。
@@ -84,10 +82,10 @@ class LisenterGroup {
         const self = this;
         self._eventName = eventName;
 
-        self.listeners = [];
-        self.arrAddListeners = [];
-        self.bDispatch = false;
-        self.eventDatas = [];
+        self._listeners = [];
+        self._arrAddListeners = [];
+        self._bDispatch = false;
+        self._eventDatas = [];
     }
 
     /** 获取当前组对应的事件名称。 */
@@ -113,20 +111,20 @@ class LisenterGroup {
      */
     public addListener(target: any, func: Function, priority: number = 0) {
         const self = this;
-        if (self.bDispatch == false) {
-            if (self.isExist(self.listeners, target, func)) return;
-            self.listeners.push(new Listener(target, func, priority));
+        if (self._bDispatch == false) {
+            if (self.isExist(self._listeners, target, func)) return;
+            self._listeners.push(new Listener(target, func, priority));
             self.sortListener();
         } else {
-            if (self.isExist(self.listeners, target, func)) return;
-            if (self.isExist(self.arrAddListeners, target, func)) return;
-            self.arrAddListeners.push(new Listener(target, func, priority));
+            if (self.isExist(self._listeners, target, func)) return;
+            if (self.isExist(self._arrAddListeners, target, func)) return;
+            self._arrAddListeners.push(new Listener(target, func, priority));
         }
     }
 
     /** 按优先级从高到低排序监听器。 */
     public sortListener() {
-        this.listeners.sort(function (a, b) {
+        this._listeners.sort(function (a, b) {
             return b.priority - a.priority;
         });
     }
@@ -154,32 +152,32 @@ class LisenterGroup {
      */
     public removeListener(target: any, func?: Function) {
         if (func != null) {
-            for (let i = 0; i < this.arrAddListeners.length;) {
-                let listener = this.arrAddListeners[i];
+            for (let i = 0; i < this._arrAddListeners.length; ) {
+                let listener = this._arrAddListeners[i];
                 if (listener.target == target && listener.func == func) {
-                    this.arrAddListeners.splice(i, 1);
+                    this._arrAddListeners.splice(i, 1);
                 } else {
                     ++i;
                 }
             }
 
-            for (let listener of this.listeners) {
+            for (let listener of this._listeners) {
                 if (listener.target == target && listener.func == func) {
                     listener.onRemove();
                     return;
                 }
             }
         } else {
-            for (let i = 0; i < this.arrAddListeners.length;) {
-                let listener = this.arrAddListeners[i];
+            for (let i = 0; i < this._arrAddListeners.length; ) {
+                let listener = this._arrAddListeners[i];
                 if (listener.target == target) {
-                    this.arrAddListeners.splice(i, 1);
+                    this._arrAddListeners.splice(i, 1);
                 } else {
                     ++i;
                 }
             }
 
-            for (let listener of this.listeners) {
+            for (let listener of this._listeners) {
                 if (listener.target == target) {
                     listener.onRemove();
                     return;
@@ -190,7 +188,7 @@ class LisenterGroup {
 
     /** 判断当前事件组是否为空。 */
     public empty() {
-        return this.listeners.length <= 0;
+        return this._listeners.length <= 0;
     }
 
     /**
@@ -198,7 +196,7 @@ class LisenterGroup {
      * @param obj 原对象
      */
     public clone(obj: any) {
-        if (Object.prototype.toString.call(obj) == "[object Object]") {
+        if (Object.prototype.toString.call(obj) == `[object Object]`) {
             let newObj: any = {};
             for (let key in obj) {
                 if (obj.hasOwnProperty(key)) {
@@ -206,7 +204,7 @@ class LisenterGroup {
                 }
             }
             return newObj;
-        } else if (Object.prototype.toString.call(obj) == "[object Array]") {
+        } else if (Object.prototype.toString.call(obj) == `[object Array]`) {
             let newObj: any = [];
             for (let key in obj) {
                 if (obj.hasOwnProperty(key)) {
@@ -223,43 +221,43 @@ class LisenterGroup {
      * @param data 事件参数
      */
     public onEvent(data?: any) {
-        if (this.bDispatch) {
-            this.eventDatas.push(this.clone(data));
+        if (this._bDispatch) {
+            this._eventDatas.push(this.clone(data));
             return;
         }
 
-        this.bDispatch = true;
+        this._bDispatch = true;
         this.discard();
         this.merge();
 
-        for (let listener of this.listeners) {
+        for (let listener of this._listeners) {
             listener.onEvent(data);
         }
 
-        this.bDispatch = false;
+        this._bDispatch = false;
 
-        if (this.eventDatas.length > 0) {
-            let data2 = this.eventDatas[0];
-            this.eventDatas.splice(0, 1);
+        if (this._eventDatas.length > 0) {
+            let data2 = this._eventDatas[0];
+            this._eventDatas.splice(0, 1);
             this.onEvent(data2);
         }
     }
 
     /** 将分发期间暂存的新监听合并到正式列表。 */
     public merge() {
-        if (this.arrAddListeners.length <= 0) return;
-        for (let listener of this.arrAddListeners) {
-            this.listeners.push(listener);
+        if (this._arrAddListeners.length <= 0) return;
+        for (let listener of this._arrAddListeners) {
+            this._listeners.push(listener);
         }
         this.sortListener();
-        this.arrAddListeners.splice(0, this.arrAddListeners.length);
+        this._arrAddListeners.splice(0, this._arrAddListeners.length);
     }
 
     /** 丢弃已标记为移除的监听。 */
     public discard() {
-        for (let i = 0; i < this.listeners.length;) {
-            if (this.listeners[i].removed) {
-                this.listeners.splice(i, 1);
+        for (let i = 0; i < this._listeners.length; ) {
+            if (this._listeners[i].removed) {
+                this._listeners.splice(i, 1);
             } else {
                 ++i;
             }
@@ -269,13 +267,12 @@ class LisenterGroup {
 
 /** 全局事件中心，管理监听注册、移除和派发。 */
 export default class EventManager extends Singleton<EventManager>() {
-
-    private listenerGroup: LisenterGroup[];
+    private _listenerGroup: LisenterGroup[];
 
     /** 初始化事件管理器。 */
     constructor() {
         super();
-        this.listenerGroup = [];
+        this._listenerGroup = [];
     }
 
     /**
@@ -285,11 +282,16 @@ export default class EventManager extends Singleton<EventManager>() {
      * @param func 回调函数
      * @param priority 优先级，值越大越先执行
      */
-    public addListener(eventName: number | string, target: any, func: Function, priority: number = 0) {
+    public addListener(
+        eventName: number | string,
+        target: any,
+        func: Function,
+        priority: number = 0,
+    ) {
         let group = this.getListenerGroup(eventName);
         if (group == null) {
             group = new LisenterGroup(eventName);
-            this.listenerGroup.push(group);
+            this._listenerGroup.push(group);
         }
 
         group.addListener(target, func, priority);
@@ -301,14 +303,18 @@ export default class EventManager extends Singleton<EventManager>() {
      * @param target 回调执行对象
      * @param func 回调函数；为空时移除该 target 在该事件下的全部监听
      */
-    public removeListener(eventName: number | string, target: any, func?: Function) {
-        for (let i = 0; i < this.listenerGroup.length; ++i) {
-            let group = this.listenerGroup[i];
+    public removeListener(
+        eventName: number | string,
+        target: any,
+        func?: Function,
+    ) {
+        for (let i = 0; i < this._listenerGroup.length; ++i) {
+            let group = this._listenerGroup[i];
             if (group.eventName == eventName) {
                 group.removeListener(target, func);
 
                 if (group.empty()) {
-                    this.listenerGroup.splice(i, 1);
+                    this._listenerGroup.splice(i, 1);
                 }
                 return;
             }
@@ -320,12 +326,12 @@ export default class EventManager extends Singleton<EventManager>() {
      * @param target 回调执行对象
      */
     public removeTarget(target: any) {
-        for (let i = 0; i < this.listenerGroup.length;) {
-            let group = this.listenerGroup[i];
+        for (let i = 0; i < this._listenerGroup.length; ) {
+            let group = this._listenerGroup[i];
             group.removeListener(target);
 
             if (group.empty()) {
-                this.listenerGroup.splice(i, 1);
+                this._listenerGroup.splice(i, 1);
             } else {
                 ++i;
             }
@@ -337,7 +343,7 @@ export default class EventManager extends Singleton<EventManager>() {
      * @param eventName 事件名称
      */
     public getListenerGroup(eventName: number | string) {
-        for (let group of this.listenerGroup) {
+        for (let group of this._listenerGroup) {
             if (group.eventName == eventName) {
                 return group;
             }
@@ -359,7 +365,7 @@ export default class EventManager extends Singleton<EventManager>() {
 
     /** 销毁单例时清空全部事件组。 */
     protected onDestroyInstance() {
-        this.listenerGroup.splice(0, this.listenerGroup.length);
+        this._listenerGroup.splice(0, this._listenerGroup.length);
     }
 }
 
@@ -370,7 +376,12 @@ export default class EventManager extends Singleton<EventManager>() {
  * @param func 回调函数
  * @param priority 优先级，值越大越先执行
  */
-export let onEvent = function (eventName: number | string, target: any, func: Function, priority: number = 0) {
+export let onEvent = function (
+    eventName: number | string,
+    target: any,
+    func: Function,
+    priority: number = 0,
+) {
     EventManager.Inst.addListener(eventName, target, func, priority);
 };
 
@@ -383,7 +394,11 @@ export let onEvent = function (eventName: number | string, target: any, func: Fu
  * offEvent( "event1", this, this.func1 );
  * offEvent( this );
  */
-export let offEvent = function (nameOrTarget: (number | string) | any, target?: any, func?: Function) {
+export let offEvent = function (
+    nameOrTarget: (number | string) | any,
+    target?: any,
+    func?: Function,
+) {
     if (target != null) {
         EventManager.Inst.removeListener(nameOrTarget, target, func);
     } else {

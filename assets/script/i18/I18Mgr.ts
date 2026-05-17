@@ -1,255 +1,300 @@
-import { AssetManager, assetManager, Director, director, error, errorID, JsonAsset, Node, Prefab, resources, SceneAsset, Sprite, SpriteFrame, sys, warnID } from "cc";
+import {
+    AssetManager,
+    assetManager,
+    Director,
+    director,
+    error,
+    errorID,
+    JsonAsset,
+    Node,
+    Prefab,
+    resources,
+    SceneAsset,
+    Sprite,
+    SpriteFrame,
+    sys,
+    warnID,
+} from "cc";
 import { sp } from "cc";
 import { Asset } from "cc";
 import { SpriteAtlas } from "cc";
 
-import EventCenter from "../kernel/core/event/EventCenter";
 import { I18BtnUrl } from "./I18BtnUrl";
 import I18LanguageHelper, { EBundleName } from "./I18LanguageHelper";
 import { EI18AssetType, I18PreUrl } from "./I18PreUrl";
 import TxtMgr from "./TxtMgr";
+import { emitEvent } from "../Common/EventManager";
 
-
-export default class I18Mgr {
-    static instance : I18Mgr = null;
-    static getInstance(): I18Mgr{
-        if( I18Mgr.instance == null ){
-            I18Mgr.instance = new I18Mgr();
-        }
-        return I18Mgr.instance;
-    }
-
-    _currBundleName : EBundleName = EBundleName.NONE;
-    _currBundle : AssetManager.Bundle = null;
+export default class I18Mgr extends Singleton<I18Mgr>() {
+    _currBundleName: EBundleName = EBundleName.NONE;
+    _currBundle: AssetManager.Bundle | null = null;
 
     _mapPrefabResInfo: Map<string, Map<EI18AssetType, string[]>> = new Map();
     _mapRes = new Map<EI18AssetType, Map<string, any>>();
 
-    constructor(){
-        // const self = this;
-        // this.changeLanguage( defaultLanguage );
-    }
-
-    initDefaultLanguage( completeCllaback = null ){
+    initDefaultLanguage(completeCllaback?: Function) {
         const self = this;
-        self.changeBundle( self.getConfigBundleName(), completeCllaback );
+        self.changeBundle(self.getConfigBundleName(), completeCllaback);
     }
 
-    isDefaultBundle(){
+    isDefaultBundle() {
         return this._currBundleName == EBundleName.Default;
     }
 
-    changeBundle( bundle: EBundleName, completeCallback = null ){
+    changeBundle(bundle: EBundleName, completeCallback?: Function) {
         const self = this;
 
-        console.log( "I18Mgr changeLanguage " + bundle );
-        if( self._currBundleName == bundle ){
-            if( completeCallback ){
-                completeCallback( null );
+        console.log(`I18Mgr changeLanguage ${bundle}`);
+        if (self._currBundleName == bundle) {
+            if (completeCallback) {
+                completeCallback(null);
             }
             return;
-        };
+        }
 
         self._currBundleName = bundle;
         self._mapRes.clear();
         self._mapPrefabResInfo.clear();
-        
-        if( self._currBundleName == EBundleName.Default ){
+
+        if (self._currBundleName == EBundleName.Default) {
             // 有正在使用的情况,不能立即释放,切换语言包应当重启
             // if( self._currBundle != null ){
             //     self._currBundle.releaseAll();
             //     assetManager.removeBundle( self._currBundle );
             // }
             self._currBundle = null;
-            
-            console.log( "I18Mgr load resources" );
-            const url = EBundleName.Default + "/" + TxtMgr.url;
-            resources.load( url, JsonAsset, ( err: Error, data: JsonAsset )=>{
-                if( err ){
-                    console.error( `I18Mgr load ${url} error` );
-                    console.error( err );
 
-                    if( completeCallback ){
-                        completeCallback( err );
+            console.log(`I18Mgr load resources`);
+            const url: string = `${EBundleName.Default}/${TxtMgr.url}`;
+            // @ts-ignore
+            resources.load(url, JsonAsset, (err: Error, data: JsonAsset) => {
+                if (err) {
+                    console.error(`I18Mgr load ${url} error`);
+                    console.error(err);
+
+                    if (completeCallback) {
+                        completeCallback(err);
                     }
                     return;
                 }
-                self.onLoadTxt( data );
+                self.onLoadTxt(data);
 
-                if( completeCallback ){
-                    completeCallback( null );
+                if (completeCallback) {
+                    completeCallback(null);
                 }
-            } );
-        }else{
-            console.log( "I18Mgr loadBundle " + self._currBundleName );
-            assetManager.loadBundle( self._currBundleName, (err: Error | null, bundle: AssetManager.Bundle)=>{
-                if( err ){
-                    console.log( `I18Mgr loadBundle ${self._currBundleName} error` );
-                    console.error( err );
-                    self.changeBundle( EBundleName.Default, completeCallback );
-                    return;
-                }
-    
-                // 有正在使用的情况,不能立即释放,切换语言包应当重启
-                // if( self._currBundle != null ){
-                //     self._currBundle.releaseAll();
-                //     assetManager.removeBundle( self._currBundle );
-                // }
-                self._currBundle = bundle;
-                bundle.load( TxtMgr.url, JsonAsset, ( err: Error, data: JsonAsset )=>{
-                    if( err ){
-                        console.error( `I18Mgr load ${TxtMgr.url} error` );
-                        console.error( err );
-                        
-                        if( completeCallback ){
-                            completeCallback( err );
-                        }
+            });
+        } else {
+            console.log(`I18Mgr loadBundle ${self._currBundleName}`);
+            assetManager.loadBundle(
+                self._currBundleName,
+                (err: Error | null, bundle: AssetManager.Bundle) => {
+                    if (err) {
+                        console.log(
+                            `I18Mgr loadBundle ${self._currBundleName} error`,
+                        );
+                        console.error(err);
+                        self.changeBundle(
+                            EBundleName.Default,
+                            completeCallback,
+                        );
                         return;
                     }
-                    self.onLoadTxt( data );
 
-                    if( completeCallback ){
-                        completeCallback( null );
-                    }
-                } );
-            } );
+                    // 有正在使用的情况,不能立即释放,切换语言包应当重启
+                    // if( self._currBundle != null ){
+                    //     self._currBundle.releaseAll();
+                    //     assetManager.removeBundle( self._currBundle );
+                    // }
+                    self._currBundle = bundle;
+                    bundle.load(
+                        // @ts-ignore
+                        TxtMgr.url,
+                        JsonAsset,
+                        (err: Error, data: JsonAsset) => {
+                            if (err) {
+                                console.error(
+                                    `I18Mgr load ${TxtMgr.url} error`,
+                                );
+                                console.error(err);
+
+                                if (completeCallback) {
+                                    completeCallback(err);
+                                }
+                                return;
+                            }
+                            self.onLoadTxt(data);
+
+                            if (completeCallback) {
+                                completeCallback(null);
+                            }
+                        },
+                    );
+                },
+            );
         }
     }
 
-
-    onLoadTxt( data: JsonAsset ){
-        TxtMgr.getInstance().setData( data );
-        EventCenter.getInstance().fire( "I18BundleReady" );
+    onLoadTxt(data: JsonAsset) {
+        TxtMgr.getInstance().setData(data);
+        emitEvent(`I18BundleReady`);
     }
 
-    isReady(){
+    isReady() {
         const self = this;
-        return (self._currBundleName == EBundleName.Default) || (self._currBundle != null);
+        return (
+            self._currBundleName == EBundleName.Default ||
+            self._currBundle != null
+        );
     }
 
-    getCurrBundleName(){
+    getCurrBundleName() {
         return this._currBundleName;
     }
 
-    getCurrBundle() : AssetManager.Bundle {
-        return this._currBundle;
+    getCurrBundle(): AssetManager.Bundle {
+        return this._currBundle!;
     }
 
-    getRes( name: string, assetType: any, callback:((err: Error | null, data: any) => void) ){
+    getRes(
+        name: string,
+        assetType: any,
+        callback: (err: Error | null, data: any) => void,
+    ) {
         const self = this;
 
-        const map = self._mapRes.get( assetType );
-        if( map != null ){
-            const resData = map.get( name );
-            if( resData != null ){
-                callback( null, resData );
+        const map = self._mapRes.get(assetType);
+        if (map != null) {
+            const resData = map.get(name);
+            if (resData != null) {
+                callback(null, resData);
                 return;
             }
         }
 
-        if( self._currBundleName == EBundleName.Default ){
-            resources.load( EBundleName.Default + "/" + name, assetType, ( err, data )=>{
-                if( err == null ){
-                    let map = self._mapRes.get( assetType );
-                    if( map == null ){
-                        map = new Map();
-                        self._mapRes.set( assetType, map );
-                    }
-                    map.set( name, data );
-                }
-                callback( err, data );
-            } );
-        }else{
-            if( self._currBundle ){
-                self._currBundle.load( name, assetType, ( err, data )=>{
-                    if( err == null ){
-                        let map = self._mapRes.get( assetType );
-                        if( map == null ){
+        if (self._currBundleName == EBundleName.Default) {
+            resources.load(
+                `${EBundleName.Default}/${name}`,
+                assetType,
+                (err, data) => {
+                    if (err == null) {
+                        let map = self._mapRes.get(assetType);
+                        if (map == null) {
                             map = new Map();
-                            self._mapRes.set( assetType, map );
+                            self._mapRes.set(assetType, map);
                         }
-                        map.set( name, data );
+                        map.set(name, data);
                     }
-                    callback( err, data );
-                } );
-            }else{
-                callback( new Error( self._currBundleName + "bundle is null" ), null );
+                    callback(err, data);
+                },
+            );
+        } else {
+            if (self._currBundle) {
+                self._currBundle.load(name, assetType, (err, data) => {
+                    if (err == null) {
+                        let map = self._mapRes.get(assetType);
+                        if (map == null) {
+                            map = new Map();
+                            self._mapRes.set(assetType, map);
+                        }
+                        map.set(name, data);
+                    }
+                    callback(err, data);
+                });
+            } else {
+                callback(
+                    new Error(`${self._currBundleName}bundle is null`),
+                    null,
+                );
             }
         }
     }
 
-    getConfigBundleName(){
+    getConfigBundleName() {
         const self = this;
-        
-        let language = "";
+
+        let language: string | null = ``;
         //浏览器语言参数
-        if( sys.isBrowser ){
-            const params = self.getURLParam();
-            if( params != null && params[ "l" ] != null ){
-                language = params[ "l" ];
+        if (sys.isBrowser) {
+            const params: any = self.getURLParam();
+            if (params != null && params[`l`] != null) {
+                language = params[`l`];
             }
         }
-        if( language != "" && language != null ){
-            console.log( "I18Mgr get language by browser " + language );
-            return I18LanguageHelper.getBundleByStr( language.toUpperCase() );
+        if (language != `` && language != null) {
+            console.log(`I18Mgr get language by browser ${language}`);
+            return I18LanguageHelper.getBundleByStr(language.toUpperCase());
         }
 
-        language = localStorage.getItem( "language" );
-        if( language != "" && language != null ){
-            console.log( "I18Mgr get language by localStorage " + language );
+        language = localStorage.getItem(`language`);
+        if (language != `` && language != null) {
+            console.log(`I18Mgr get language by localStorage ${language}`);
             return I18LanguageHelper.getBundleByStr(language);
         }
-        
-        console.log( "I18Mgr get language by default " + EBundleName.Default );
+
+        console.log(`I18Mgr get language by default ${EBundleName.Default}`);
         return EBundleName.Default;
     }
 
-    getURLParam(){
-        if( !sys.isBrowser ) return null;
+    getURLParam() {
+        if (!sys.isBrowser) return null;
 
-        const arrStr = window.location.href.split( "?" );
-        if( arrStr.length <= 1 ) return null;
+        const arrStr = window.location.href.split(`?`);
+        if (arrStr.length <= 1) return null;
 
         const strParams = arrStr[1];
-        const arrParam = strParams.split( "&" );
-        const params = {};
-        for( const str of arrParam ){
-            const arr = str.split( "=" );
-            if( arr.length != 2 ) continue;
-            params[ arr[0] ] = arr[1];
+        const arrParam = strParams.split(`&`);
+        const params: any = {};
+        for (const str of arrParam) {
+            const arr = str.split(`=`);
+            if (arr.length != 2) continue;
+            params[arr[0]] = arr[1];
         }
         return params;
     }
 
-    preloadScene (
+    preloadScene(
         sceneName: string,
-        bundle: AssetManager.Bundle,
-        onProgress : (completedCount: number, totalCount: number, item: any) => void,
-        onLoaded: Director.OnSceneLoaded,
+        bundle?: AssetManager.Bundle | null,
+        onProgress?: (
+            completedCount: number,
+            totalCount: number,
+            item: any,
+        ) => void,
+        onLoaded?: Director.OnSceneLoaded,
     ): void {
         const self = this;
         let loadCountTmp = 0;
         let totalCountTmp = 1;
 
-        if( bundle == null ){
-            bundle = assetManager.bundles.find((bundle): boolean => !!bundle.getSceneInfo(sceneName));
+        if (bundle == null) {
+            bundle = assetManager.bundles.find(
+                (bundle): boolean => !!bundle.getSceneInfo(sceneName),
+            );
         }
-        
+
         if (bundle) {
             bundle.loadScene(
                 sceneName,
                 null,
-                (finished: number, total: number, item: any)=>{
+                (finished: number, total: number, item: any) => {
                     loadCountTmp = finished;
                     totalCountTmp = total;
-                    onProgress( finished, total * 1.3, item );
+                    onProgress?.(finished, total * 1.3, item);
                 },
 
-                (err: Error | null, data: SceneAsset)=>{
-                    self.loadResByNode( data.scene, onLoaded, ( finished: number, total: number )=>{
-                        onProgress( loadCountTmp + finished, totalCountTmp + total, null );
-                    } );
-                }
+                (err: Error | null, data: SceneAsset) => {
+                    self.loadResByNode(
+                        data.scene as Node,
+                        onLoaded,
+                        (finished: number, total: number) => {
+                            onProgress?.(
+                                loadCountTmp + finished,
+                                totalCountTmp + total,
+                                null,
+                            );
+                        },
+                    );
+                },
             );
         } else {
             const err = `Can not preload the scene "${sceneName}" because it is not in the build settings.`;
@@ -260,32 +305,37 @@ export default class I18Mgr {
         }
     }
 
-    loadScene(sceneName: string, onLaunched?: Director.OnSceneLaunched, onUnloaded?: Director.OnUnload): boolean {
+    loadScene(
+        sceneName: string,
+        onLaunched?: Director.OnSceneLaunched,
+        onUnloaded?: Director.OnUnload,
+    ): boolean {
         const self = this;
-        const direct = director;
-        if (direct[ "_loadingScene" ]) {
-            warnID(1208, sceneName, direct[ "_loadingScene" ]);
+        const direct: any = director;
+        if (direct[`_loadingScene`]) {
+            warnID(1208, sceneName, direct[`_loadingScene`]);
             return false;
         }
-        const bundle = assetManager.bundles.find((bundle): boolean => !!bundle.getSceneInfo(sceneName));
+        const bundle = assetManager.bundles.find(
+            (bundle): boolean => !!bundle.getSceneInfo(sceneName),
+        );
         if (bundle) {
-            direct.emit( "director_before_scene_loading", sceneName);
-            direct[ "_loadingScene" ] = sceneName;
-             
+            direct.emit(`director_before_scene_loading`, sceneName);
+            direct[`_loadingScene`] = sceneName;
+
             console.time(`LoadScene ${sceneName}`);
             bundle.loadScene(sceneName, (err, scene): void => {
-                 
                 console.timeEnd(`LoadScene ${sceneName}`);
-                direct[ "_loadingScene" ] = '';
+                direct[`_loadingScene`] = ``;
                 if (err) {
                     error(err);
                     if (onLaunched) {
                         onLaunched(err);
                     }
                 } else {
-                    self.loadResByNode( scene.scene, ()=>{
+                    self.loadResByNode(scene.scene as Node, () => {
                         direct.runSceneImmediate(scene, onUnloaded, onLaunched);
-                    } );
+                    });
                 }
             });
             return true;
@@ -295,30 +345,33 @@ export default class I18Mgr {
         }
     }
 
-    loadResByNode( loadNode: Node, 
-        loadFinishedCallback:Function = null,
-        progressCallback:Function = null 
-    ){
+    loadResByNode(
+        loadNode: Node,
+        loadFinishedCallback?: Function,
+        progressCallback?: Function,
+    ) {
         const self = this;
-        const mapResInfo = self.getAllResInfoInNode( loadNode );
-        self.loadResByUrls( mapResInfo, loadFinishedCallback, progressCallback );
+        const mapResInfo = self.getAllResInfoInNode(loadNode);
+        self.loadResByUrls(mapResInfo, loadFinishedCallback, progressCallback);
     }
 
-    loadResByPrefab( prefab: Prefab, 
-        loadFinishedCallback:Function = null,
-        progressCallback:Function = null 
-    ){
+    loadResByPrefab(
+        prefab: Prefab,
+        loadFinishedCallback?: Function,
+        progressCallback?: Function,
+    ) {
         const self = this;
-        let mapResInfo = this.getAllResInfoInPrefab( prefab );
-        self.loadResByUrls( mapResInfo, loadFinishedCallback, progressCallback );
+        let mapResInfo = this.getAllResInfoInPrefab(prefab);
+        self.loadResByUrls(mapResInfo!, loadFinishedCallback, progressCallback);
     }
 
-    loadResByUrls( mapResInfo:Map<EI18AssetType, string[]>,
-        loadFinishedCallback:Function = null,
-        progressCallback:Function = null 
-     ){
-        if( mapResInfo.size == 0 ){
-            if( loadFinishedCallback ){
+    loadResByUrls(
+        mapResInfo: Map<EI18AssetType, string[]>,
+        loadFinishedCallback?: Function,
+        progressCallback?: Function,
+    ) {
+        if (mapResInfo.size == 0) {
+            if (loadFinishedCallback) {
                 loadFinishedCallback();
             }
             return;
@@ -327,164 +380,181 @@ export default class I18Mgr {
         const self = this;
 
         let totalCount = 0;
-        for( const resInfo of mapResInfo ){
+        for (const resInfo of mapResInfo) {
             totalCount += resInfo[1].length;
         }
 
         let loadCount = 0;
-        for( const resInfo of mapResInfo ){
-            const resType = self.getAssetType( resInfo[0] );
+        for (const resInfo of mapResInfo) {
+            const resType = self.getAssetType(resInfo[0]);
             const szUrl = resInfo[1];
-            for( const url of szUrl ){
+            for (const url of szUrl) {
                 //console.log( "i18Mgr loadResByUrls start " + url );
-                const assetUrl = resInfo[0] == EI18AssetType.SpriteFrame ? url + "/spriteFrame" : url;
-                self.getRes( assetUrl, resType, ( err, assetData : Asset )=>{
-                    if( err ){
-                        if( loadFinishedCallback ){
-                            loadFinishedCallback( err );
+                const assetUrl =
+                    resInfo[0] == EI18AssetType.SpriteFrame
+                        ? `${url}/spriteFrame`
+                        : url;
+                // eslint-disable-next-line unused-imports/no-unused-vars
+                self.getRes(assetUrl, resType, (err, assetData: Asset) => {
+                    if (err) {
+                        if (loadFinishedCallback) {
+                            loadFinishedCallback(err);
                         }
                         return;
                     }
                     //console.log( "i18Mgr loadResByUrls end " + assetData.name );
                     ++loadCount;
-                    if( progressCallback ){
-                        progressCallback( loadCount, totalCount );
+                    if (progressCallback) {
+                        progressCallback(loadCount, totalCount);
                     }
-                    if( loadCount >= totalCount ){
-                        if( loadFinishedCallback ){
-                            loadFinishedCallback( null );
+                    if (loadCount >= totalCount) {
+                        if (loadFinishedCallback) {
+                            loadFinishedCallback(null);
                         }
                     }
-                } );
+                });
             }
         }
     }
 
-    getAssetType( assetType: EI18AssetType ){
-        switch( assetType ){
-            case EI18AssetType.SpriteFrame: return SpriteFrame;
-            case EI18AssetType.SkeletonData: return sp.SkeletonData;
-            case EI18AssetType.SpriteAtlas: return SpriteAtlas;
-            default: return Asset;
+    getAssetType(assetType: EI18AssetType) {
+        switch (assetType) {
+            case EI18AssetType.SpriteFrame:
+                return SpriteFrame;
+            case EI18AssetType.SkeletonData:
+                return sp.SkeletonData;
+            case EI18AssetType.SpriteAtlas:
+                return SpriteAtlas;
+            default:
+                return Asset;
         }
     }
 
-    getAllResInfoInNode( node: Node ){
+    getAllResInfoInNode(node: Node) {
         const self = this;
 
-        let mapResInfo = self.getNodePreUrl( node );
-        if( mapResInfo == null ){
+        let mapResInfo = self.getNodePreUrl(node);
+        if (mapResInfo == null) {
             mapResInfo = new Map<EI18AssetType, string[]>();
         }
 
-        const addUrl = function( type:any, url: string ){
-            let szUrl = mapResInfo.get( type );
-            if( szUrl == null ){
+        const addUrl = function (type: any, url: string) {
+            let szUrl = mapResInfo.get(type);
+            if (szUrl == null) {
                 szUrl = [];
-                mapResInfo.set( type, szUrl );
+                mapResInfo.set(type, szUrl);
             }
-            if( szUrl.indexOf( url ) == -1 ){
-                szUrl.push( url );
+            if (szUrl.indexOf(url) == -1) {
+                szUrl.push(url);
             }
+        };
+
+        const i18CmptInfo = self.getI18CmptInfo(node);
+        if (i18CmptInfo) {
+            addUrl(i18CmptInfo[0], i18CmptInfo[1]);
         }
 
-        const i18CmptInfo = self.getI18CmptInfo( node );
-        if( i18CmptInfo ){
-            addUrl( i18CmptInfo[0], i18CmptInfo[1] );
+        const i18BtnUrls = self.getBtnUrls(node);
+        for (const url of i18BtnUrls) {
+            addUrl(EI18AssetType.SpriteFrame, url);
         }
 
-        const i18BtnUrls = self.getBtnUrls( node );
-        for( const url of i18BtnUrls ){
-            addUrl( EI18AssetType.SpriteFrame, url );
-        }
-
-        const cmpts = node.components;
-        for( const cmpt of cmpts ){
-            for( const k in cmpt ){
-                const obj = cmpt[ k ];
-                if( obj instanceof Array ){
-                    for( const objTmp of obj ){
-                        if( objTmp instanceof Prefab ){
-                            self.mergeResInfo( mapResInfo, self.getAllResInfoInPrefab( objTmp ) );
+        const cmpts: any = node.components;
+        for (const cmpt of cmpts) {
+            for (const k in cmpt) {
+                const obj = cmpt[k];
+                if (obj instanceof Array) {
+                    for (const objTmp of obj) {
+                        if (objTmp instanceof Prefab) {
+                            self.mergeResInfo(
+                                mapResInfo,
+                                self.getAllResInfoInPrefab(objTmp)!,
+                            );
                         }
                     }
-                }else if( obj instanceof Prefab ){
-                    self.mergeResInfo( mapResInfo, self.getAllResInfoInPrefab( obj ) );
+                } else if (obj instanceof Prefab) {
+                    self.mergeResInfo(
+                        mapResInfo,
+                        self.getAllResInfoInPrefab(obj)!,
+                    );
                 }
             }
         }
 
         const children = node.children;
-        for( const n of children ){
-            self.mergeResInfo( mapResInfo, self.getAllResInfoInNode( n ) );
+        for (const n of children) {
+            self.mergeResInfo(mapResInfo, self.getAllResInfoInNode(n));
         }
 
         return mapResInfo;
     }
 
-    mergeResInfo( mainResInfo: Map<EI18AssetType,Array<string>>, addResInfo: Map<EI18AssetType,Array<string>> ){
-        addResInfo.forEach(( urls, type )=>{
-            const mainUrls = mainResInfo.get( type );
-            if( mainUrls == null ){
-                mainResInfo.set( type, urls );
+    mergeResInfo(
+        mainResInfo: Map<EI18AssetType, Array<string>>,
+        addResInfo: Map<EI18AssetType, Array<string>>,
+    ) {
+        addResInfo.forEach((urls, type) => {
+            const mainUrls = mainResInfo.get(type);
+            if (mainUrls == null) {
+                mainResInfo.set(type, urls);
                 return;
             }
 
-            for( const url of urls ){
-                if( mainUrls.indexOf(url) == -1 ){
-                    mainUrls.push( url );
+            for (const url of urls) {
+                if (mainUrls.indexOf(url) == -1) {
+                    mainUrls.push(url);
                 }
             }
         });
     }
 
-    getAllResInfoInPrefab( prefab: Prefab ){
+    getAllResInfoInPrefab(prefab: Prefab) {
         const self = this;
-        if( self._mapPrefabResInfo.has( prefab.uuid ) ){
-            return self._mapPrefabResInfo.get( prefab.uuid );
+        if (self._mapPrefabResInfo.has(prefab.uuid)) {
+            return self._mapPrefabResInfo.get(prefab.uuid);
         }
 
-        const mapResInfo = this.getAllResInfoInNode( prefab.data );
-        self._mapPrefabResInfo.set( prefab.uuid, mapResInfo );
+        const mapResInfo = this.getAllResInfoInNode(prefab.data);
+        self._mapPrefabResInfo.set(prefab.uuid, mapResInfo);
         return mapResInfo;
     }
 
-    getNodePreUrl( node: Node ){
-        if( node == null ) return null;
+    getNodePreUrl(node: Node) {
+        if (node == null) return null;
 
-        const cmpt = node.getComponent( I18PreUrl );
-        if( cmpt == null ) return null;
-        
+        const cmpt = node.getComponent(I18PreUrl);
+        if (cmpt == null) return null;
+
         return cmpt.getUrls();
     }
 
-    getBtnUrls( node: Node ){
-        if( node == null ) return [];
+    getBtnUrls(node: Node) {
+        if (node == null) return [];
 
-        const cmpt = node.getComponent( I18BtnUrl );
-        if( cmpt == null ) return [];
-        
+        const cmpt = node.getComponent(I18BtnUrl);
+        if (cmpt == null) return [];
+
         return cmpt.getUrls();
     }
 
-    getI18CmptInfo( node: Node ){
-        if( node == null ) return null;
+    getI18CmptInfo(node: Node) {
+        if (node == null) return null;
 
-        const cmpt = node.getComponent( "I18Cmpt" );
-        if( cmpt == null ) return null;
+        const cmpt: any = node.getComponent(`I18Cmpt`);
+        if (cmpt == null) return null;
 
-        const sprite = node.getComponent( Sprite );
-        if( sprite != null ){
-            if( sprite.spriteAtlas == null ){
-                return [ EI18AssetType.SpriteFrame, cmpt[ "_key" ] ];
-            }else{
-                return [ EI18AssetType.SpriteAtlas, cmpt[ "_key" ] ];
+        const sprite = node.getComponent(Sprite);
+        if (sprite != null) {
+            if (sprite.spriteAtlas == null) {
+                return [EI18AssetType.SpriteFrame, cmpt[`_key`]];
+            } else {
+                return [EI18AssetType.SpriteAtlas, cmpt[`_key`]];
             }
         }
 
-        const spine = node.getComponent( sp.Skeleton );
-        if( spine != null ){
-            return [ EI18AssetType.SkeletonData, cmpt[ "_key" ] ];
+        const spine = node.getComponent(sp.Skeleton);
+        if (spine != null) {
+            return [EI18AssetType.SkeletonData, cmpt[`_key`]];
         }
 
         return null;

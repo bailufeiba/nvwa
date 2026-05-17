@@ -1,8 +1,9 @@
-export function Singleton<T>() {
-
+﻿/* eslint-disable @typescript-eslint/naming-convention */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function Singleton<T>() {
     class SingletonE {
-        protected constructor() { }
-        protected onDestroyInstance() { }
+        protected constructor() {}
+        protected onDestroyInstance() {}
 
         private static _instance: SingletonE | null = null;
         public static get Inst(): T {
@@ -18,7 +19,6 @@ export function Singleton<T>() {
                 SingletonE._instance = null;
             }
         }
-
     }
     return SingletonE;
 }

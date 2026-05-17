@@ -3,8 +3,8 @@
     "type": "3d",
     "version": "1.0.0",
     "scripts": {
-        "lint": "eslint \"**/*.ts\"",
-        "lint:fix": "eslint \"**/*.ts\" --fix"
+        "lint": "eslint \"assets/**/*.ts\"",
+        "lint:fix": "eslint \"assets/**/*.ts\" --fix"
     },
     "uuid": "7764a172-f41d-4feb-af61-2c2e25278cd6",
     "creator": {
@@ -18,8 +18,11 @@
         "@typescript-eslint/eslint-plugin": "^8.59.3",
         "@typescript-eslint/parser": "^8.59.3",
         "eslint": "^10.4.0",
-        "eslint-plugin-simple-import-sort": "^13.0.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-jsdoc": "^62.9.0",
+        "eslint-plugin-prettier": "^5.5.5",
         "eslint-plugin-unused-imports": "^4.4.1",
+        "prettier": "^3.8.3",
         "typescript": "^6.0.3"
     }
 }

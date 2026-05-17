@@ -1,34 +1,32 @@
 import { Component } from "cc";
 import { _decorator } from "cc";
 
-import EventCenter from "../kernel/core/event/EventCenter";
 import I18Mgr from "./I18Mgr";
+import { offEvent, onEvent } from "../Common/EventManager";
 
 const { ccclass, property } = _decorator;
-@ccclass('I18LanguageNode')
+@ccclass(`I18LanguageNode`)
 export class I18LanguageNode extends Component {
-
-    @property({visible: true})
-    _language: string = "";
+    @property({ visible: true })
+    _language: string = ``;
 
     protected onLoad(): void {
         const self = this;
-        EventCenter.getInstance().listen( "I18BundleReady", self.onI18BundleReady, self );
+        onEvent(`I18BundleReady`, self, self.onI18BundleReady);
         self.checkActive();
     }
 
-    onI18BundleReady(){
+    onI18BundleReady() {
         this.checkActive();
     }
 
-    checkActive(){
+    checkActive() {
         const self = this;
-        const language = I18Mgr.getInstance().getCurrBundleName();
+        const language = I18Mgr.Inst.getCurrBundleName();
         self.node.active = self._language == language;
     }
 
     protected onDestroy(): void {
-        EventCenter.getInstance().removeByTarget( this );
+        offEvent(this);
     }
-
 }

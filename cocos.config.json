@@ -1,0 +1,7 @@
+{
+    "scene": {
+        "tick": false
+    },
+    "version": "1.0.0",
+    "$schema": "./temp/cli/cocos.config.schema.json"
+}

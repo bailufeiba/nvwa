@@ -1,0 +1,25 @@
+{
+    "name": "nvwa_pink",
+    "type": "3d",
+    "version": "1.0.0",
+    "scripts": {
+        "lint": "eslint \"**/*.ts\"",
+        "lint:fix": "eslint \"**/*.ts\" --fix"
+    },
+    "uuid": "7764a172-f41d-4feb-af61-2c2e25278cd6",
+    "creator": {
+        "version": "3.8.8"
+    },
+    "pink": {
+        "uuid": "04d2cd79-196e-4a1d-934b-d75902f181ef",
+        "version": "1.110.1"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^8.59.3",
+        "@typescript-eslint/parser": "^8.59.3",
+        "eslint": "^10.4.0",
+        "eslint-plugin-simple-import-sort": "^13.0.0",
+        "eslint-plugin-unused-imports": "^4.4.1",
+        "typescript": "^6.0.3"
+    }
+}

@@ -24,6 +24,7 @@ import I18LanguageHelper, { EBundleName } from "./I18LanguageHelper";
 import { EI18AssetType, I18PreUrl } from "./I18PreUrl";
 import TxtMgr from "./TxtMgr";
 import { emitEvent } from "../Common/EventManager";
+import { Singleton } from "../Common/Singleton";
 
 export default class I18Mgr extends Singleton<I18Mgr>() {
     _currBundleName: EBundleName = EBundleName.NONE;

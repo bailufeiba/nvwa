@@ -1,3 +1,5 @@
+import { Singleton } from "../Common/Singleton";
+
 export default class GameData extends Singleton<GameData>() {
     private _timeSpeed: number = 1;
 

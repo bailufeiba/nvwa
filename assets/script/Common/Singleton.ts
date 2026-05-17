@@ -1,6 +1,5 @@
 ﻿/* eslint-disable @typescript-eslint/naming-convention */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function Singleton<T>() {
+export function Singleton<T>() {
     class SingletonE {
         protected constructor() {}
         protected onDestroyInstance() {}

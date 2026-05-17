@@ -1,4 +1,5 @@
 import { isValid } from "cc";
+import { Singleton } from "./Singleton";
 
 /** 单个监听器包装，保存回调及其状态。 */
 class Listener {

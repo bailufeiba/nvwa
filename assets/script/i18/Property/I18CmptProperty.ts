@@ -1,6 +1,5 @@
 import { _decorator } from "cc";
 import { Component } from "cc";
-import { ccenum } from "cc";
 
 import { EBundleName } from "../I18LanguageHelper";
 import I18Mgr from "../I18Mgr";
@@ -9,8 +8,8 @@ const { ccclass, property } = _decorator;
 
 @ccclass(`I18PropertyBase`)
 export class I18PropertyBase {
-    @property({ type: ccenum(EBundleName) })
-    lang: EBundleName = EBundleName.Default;
+    @property
+    lang: string = EBundleName.Default;
 }
 
 @ccclass(`I18CmptPropertyBase`)

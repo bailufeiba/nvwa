@@ -9,7 +9,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass(`I18Pos`)
 class I18Pos extends I18PropertyBase {
-    @property({ type: Vec2, tooltip: `位置` })
+    @property
     pos: Vec2 = v2(0, 0);
 }
 

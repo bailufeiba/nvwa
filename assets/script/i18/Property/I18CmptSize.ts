@@ -9,7 +9,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass(`I18Size`)
 class I18Size extends I18PropertyBase {
-    @property({ type: Size, tooltip: `宽高` })
+    @property
     size: Size = size(0, 0);
 }
 

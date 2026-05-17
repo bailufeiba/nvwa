@@ -8,7 +8,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass(`I18Scale`)
 class I18Scale extends I18PropertyBase {
-    @property({ type: Vec3, tooltip: `缩放` })
+    @property
     scale: Vec3 = v3(1, 1, 1);
 }
 

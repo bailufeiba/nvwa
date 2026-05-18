@@ -101,14 +101,20 @@ export default [
             "jsdoc/require-description": "error",
             "jsdoc/check-alignment": "error",
             "jsdoc/check-indentation": "error",
-            "prettier/prettier": ["error", { "tabWidth": 4, "useTabs": false, "endOfLine": "auto" }],
+            "prettier/prettier": ["error", { "tabWidth": 4, "useTabs": false, "endOfLine": "auto", "trailingComma": "es5" }],
             "indent": ["error", 4, {
                 "SwitchCase": 1,
                 // 避免装饰器字段在 TS AST 下被误判为需要双倍缩进
                 "ignoredNodes": ["PropertyDefinition[decorators]"]
             }], // 强制使用4个空格缩进
             "no-tabs": ["error", { "allowIndentationTabs": false }], // 禁止使用Tab，统一为4空格
-            "comma-dangle": ["error", "always-multiline"], // 要求多行对象或数组的最后一个元素后面有逗号
+            "comma-dangle": ["error", {
+                arrays: "always-multiline",
+                objects: "always-multiline",
+                imports: "always-multiline",
+                exports: "always-multiline",
+                functions: "never"
+            }], // 多行结构结尾逗号，函数参数禁止
             "object-curly-spacing": ["error", "always"], // 强制在对象字面量的大括号中使用一致的空格
             "array-bracket-spacing": ["error", "never"], // 禁止在数组括号内使用空格
         },

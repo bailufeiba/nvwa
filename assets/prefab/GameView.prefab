@@ -909,7 +909,7 @@
   },
   {
     "__type__": "cc.PrefabInstance",
-    "fileId": "fdy81LIi9H6awErHUAMXAO",
+    "fileId": "f2I9b07cdAX5Nwf+A14uj3",
     "prefabRootNode": {
       "__id__": 1
     },
@@ -939,7 +939,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "Room1"
+    "value": "Room2"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -958,7 +958,7 @@
     "value": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0.3489999999999327,
+      "y": 150.55099999999993,
       "z": 0
     }
   },
@@ -1021,7 +1021,7 @@
   },
   {
     "__type__": "cc.PrefabInstance",
-    "fileId": "f2I9b07cdAX5Nwf+A14uj3",
+    "fileId": "fdy81LIi9H6awErHUAMXAO",
     "prefabRootNode": {
       "__id__": 1
     },
@@ -1051,7 +1051,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "Room2"
+    "value": "Room1"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -1070,7 +1070,7 @@
     "value": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 150.55099999999993,
+      "y": 0.3489999999999327,
       "z": 0
     }
   },
@@ -1163,7 +1163,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "Room3"
+    "value": "Room0"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -3720,6 +3720,11 @@
     "_louTi": {
       "__id__": 85
     },
+    "_room": [
+      null,
+      null,
+      null
+    ],
     "_id": ""
   },
   {
@@ -3751,6 +3756,15 @@
       },
       {
         "__id__": 192
+      },
+      {
+        "__id__": 194
+      },
+      {
+        "__id__": 196
+      },
+      {
+        "__id__": 198
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -3798,7 +3812,7 @@
       "_bg"
     ],
     "target": {
-      "__id__": 35
+      "__id__": 43
     },
     "targetInfo": {
       "__id__": 187
@@ -3818,7 +3832,7 @@
       "_lbName"
     ],
     "target": {
-      "__id__": 35
+      "__id__": 43
     },
     "targetInfo": {
       "__id__": 189
@@ -3838,7 +3852,7 @@
       "_lbHp"
     ],
     "target": {
-      "__id__": 35
+      "__id__": 43
     },
     "targetInfo": {
       "__id__": 191
@@ -3858,7 +3872,7 @@
       "_lbAttack"
     ],
     "target": {
-      "__id__": 35
+      "__id__": 43
     },
     "targetInfo": {
       "__id__": 193
@@ -3868,6 +3882,75 @@
     "__type__": "cc.TargetInfo",
     "localID": [
       "f56cDmzl9PBptMJoArYeml"
+    ]
+  },
+  {
+    "__type__": "cc.TargetOverrideInfo",
+    "source": {
+      "__id__": 181
+    },
+    "sourceInfo": null,
+    "propertyPath": [
+      "_room",
+      "0"
+    ],
+    "target": {
+      "__id__": 51
+    },
+    "targetInfo": {
+      "__id__": 195
+    }
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "31gF0ukVxHToEEnxi3j6iD"
+    ]
+  },
+  {
+    "__type__": "cc.TargetOverrideInfo",
+    "source": {
+      "__id__": 181
+    },
+    "sourceInfo": null,
+    "propertyPath": [
+      "_room",
+      "1"
+    ],
+    "target": {
+      "__id__": 43
+    },
+    "targetInfo": {
+      "__id__": 197
+    }
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "31gF0ukVxHToEEnxi3j6iD"
+    ]
+  },
+  {
+    "__type__": "cc.TargetOverrideInfo",
+    "source": {
+      "__id__": 181
+    },
+    "sourceInfo": null,
+    "propertyPath": [
+      "_room",
+      "2"
+    ],
+    "target": {
+      "__id__": 35
+    },
+    "targetInfo": {
+      "__id__": 199
+    }
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "31gF0ukVxHToEEnxi3j6iD"
     ]
   }
 ]

@@ -27,6 +27,12 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
     _arrRoomRate: Array<Array<RoomRateData>> = [[], [], []];
     _arrZhuFuRate: Array<ZhuFuRateData> = [];
 
+    constructor() {
+        super();
+        const self = this;
+        self.init();
+    }
+
     public init() {
         const self = this;
         self.initRoom();
@@ -35,7 +41,7 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
 
     public getMap(floor: number): RoomInfo[] {
         const self = this;
-        let map: Array<RoomInfo> = [];
+        const map: Array<RoomInfo> = [];
         for (let i = 0; i < self._arrRoomRate.length; ++i) {
             const info = self.randRoom(i)!;
             if (info.type == ERoomType.ZhuFu) {
@@ -86,8 +92,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Yellow,
                 0,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -98,8 +104,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Yellow,
                 0,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -110,8 +116,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Yellow,
                 0,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -122,8 +128,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Yellow,
                 0,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -134,8 +140,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Yellow,
                 0,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -146,8 +152,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.None,
                 0,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -158,8 +164,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Yellow,
                 0,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -170,8 +176,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Yellow,
                 0,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -182,8 +188,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Blue,
                 EMonsterType.YeZhu,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -194,8 +200,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Red,
                 EMonsterType.YeZhu,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -206,8 +212,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Blue,
                 EMonsterType.ShiXiang,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -218,8 +224,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Red,
                 EMonsterType.ShiXiang,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -230,8 +236,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Gray,
                 EMonsterType.BaoJun,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
 
         curMin = curMax;
@@ -242,8 +248,8 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
                 ERoomColorType.Gray,
                 EMonsterType.ZhuZai,
                 curMin,
-                curMax,
-            ),
+                curMax
+            )
         );
     }
 
@@ -252,7 +258,7 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
         color: ERoomColorType,
         id: number,
         min: number,
-        max: number,
+        max: number
     ) {
         const info = new RoomInfo();
         info.type = type;

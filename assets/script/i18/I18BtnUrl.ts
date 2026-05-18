@@ -57,7 +57,7 @@ export class I18BtnUrl extends Component {
                     if (err) return;
                     if (!self.isValid) return;
                     btn.normalSprite = spriteFrame;
-                },
+                }
             );
         }
 
@@ -69,7 +69,7 @@ export class I18BtnUrl extends Component {
                     if (err) return;
                     if (!self.isValid) return;
                     btn.pressedSprite = spriteFrame;
-                },
+                }
             );
         }
 
@@ -81,7 +81,7 @@ export class I18BtnUrl extends Component {
                     if (err) return;
                     if (!self.isValid) return;
                     btn.hoverSprite = spriteFrame;
-                },
+                }
             );
         }
 
@@ -93,7 +93,7 @@ export class I18BtnUrl extends Component {
                     if (err) return;
                     if (!self.isValid) return;
                     btn.disabledSprite = spriteFrame;
-                },
+                }
             );
         }
     }

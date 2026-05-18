@@ -7,9 +7,11 @@ import {
     Sprite,
     SpriteFrame,
 } from "cc";
-import { RoomInfo } from "../GameDefine";
+import { ERoomType, RoomInfo } from "../GameDefine";
 import ResPath from "../ResPath";
 import Utils from "../Utils";
+import AttrBuilder from "./AttrBuilder";
+import GameData from "../GameData";
 
 const { ccclass, property } = _decorator;
 @ccclass(`Room`)
@@ -56,6 +58,29 @@ export class Room extends Component {
         self.updateRoomIcon();
         self.updateRoomColor();
         self.updateRoomName();
+        self.updateBaseAttr();
+    }
+
+    private updateBaseAttr() {
+        const self = this;
+        if (self._roomInfo == null || self._roomInfo.type != ERoomType.GuaiWu) {
+            self._lbHp!.string = ``;
+            self._lbAttack!.string = ``;
+            self._lbHp!.node.parent!.active = false;
+            self._lbAttack!.node.parent!.active = false;
+            return;
+        }
+
+        const attr = AttrBuilder.Inst.getMonsterAttr(
+            self._roomInfo.id!,
+            GameData.Inst.floor,
+            GameData.Inst.hard
+        );
+
+        self._lbHp!.node.parent!.active = true;
+        self._lbAttack!.node.parent!.active = true;
+        self._lbHp!.string = `${attr!.hp}`;
+        self._lbAttack!.string = `${attr!.attack}`;
     }
 
     private updateRoomIcon() {
@@ -68,17 +93,21 @@ export class Room extends Component {
         const res = ResPath.getRes(
             self._roomInfo.type,
             self._roomInfo.id,
-            self._roomInfo.id2,
+            self._roomInfo.id2
         );
-        resources.load(res, SpriteFrame, (err, spriteFrame) => {
-            if (err) {
-                console.warn(`Room updateRoomIcon load res:${res} failed!`);
-                return;
-            }
+        resources.load(
+            `${res}/spriteFrame`,
+            SpriteFrame,
+            (err, spriteFrame) => {
+                if (err) {
+                    console.warn(`Room updateRoomIcon load res:${res} failed!`);
+                    return;
+                }
 
-            if (!self.isValid || !isValid(self._icon)) return;
-            self._icon!.spriteFrame = spriteFrame;
-        });
+                if (!self.isValid || !isValid(self._icon)) return;
+                self._icon!.spriteFrame = spriteFrame;
+            }
+        );
     }
 
     private updateRoomColor() {

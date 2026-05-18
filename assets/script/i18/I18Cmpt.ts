@@ -119,7 +119,7 @@ export class I18Cmpt extends Component {
                         sprite.sizeMode = Sprite.SizeMode.RAW;
                         sprite.trim = false;
                         callback?.();
-                    },
+                    }
                 );
             } else {
                 i18.getRes(
@@ -131,12 +131,12 @@ export class I18Cmpt extends Component {
                         if (sprite.spriteFrame == null) return;
                         if (sprite.spriteFrame.name == ``) return;
                         sprite.spriteFrame = atlas.getSpriteFrame(
-                            sprite.spriteFrame.name,
+                            sprite.spriteFrame.name
                         );
                         sprite.sizeMode = Sprite.SizeMode.RAW;
                         sprite.trim = false;
                         callback?.();
-                    },
+                    }
                 );
             }
             return;
@@ -174,7 +174,7 @@ export class I18Cmpt extends Component {
                         spine.setAnimation(0, animName, loop);
                     }
                     callback?.();
-                },
+                }
             );
             return;
         }

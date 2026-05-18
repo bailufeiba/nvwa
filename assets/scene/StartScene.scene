@@ -54,7 +54,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 70
+      "__id__": 72
     },
     "_id": "5596bd43-0bd7-4858-9d5b-82630d04a46e"
   },
@@ -862,9 +862,7 @@
     "_startView": {
       "__id__": 6
     },
-    "_gameView": {
-      "__id__": 20
-    },
+    "_gameView": null,
     "_id": "b0a6EEJGFKCoGl+5swxh7p"
   },
   {
@@ -956,6 +954,9 @@
       },
       {
         "__id__": 67
+      },
+      {
+        "__id__": 70
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -1126,30 +1127,52 @@
     ]
   },
   {
+    "__type__": "cc.TargetOverrideInfo",
+    "source": {
+      "__id__": 50
+    },
+    "sourceInfo": null,
+    "propertyPath": [
+      "_gameView"
+    ],
+    "target": {
+      "__id__": 20
+    },
+    "targetInfo": {
+      "__id__": 71
+    }
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "f1ZaDTPPtPS4J+MVFXSukB"
+    ]
+  },
+  {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 71
-    },
-    "shadows": {
-      "__id__": 72
-    },
-    "_skybox": {
       "__id__": 73
     },
-    "fog": {
+    "shadows": {
       "__id__": 74
     },
-    "octree": {
+    "_skybox": {
       "__id__": 75
     },
-    "skin": {
+    "fog": {
       "__id__": 76
     },
-    "lightProbeInfo": {
+    "octree": {
       "__id__": 77
     },
-    "postSettings": {
+    "skin": {
       "__id__": 78
+    },
+    "lightProbeInfo": {
+      "__id__": 79
+    },
+    "postSettings": {
+      "__id__": 80
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false

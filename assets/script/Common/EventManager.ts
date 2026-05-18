@@ -287,7 +287,7 @@ export default class EventManager extends Singleton<EventManager>() {
         eventName: number | string,
         target: any,
         func: Function,
-        priority: number = 0,
+        priority: number = 0
     ) {
         let group = this.getListenerGroup(eventName);
         if (group == null) {
@@ -307,7 +307,7 @@ export default class EventManager extends Singleton<EventManager>() {
     public removeListener(
         eventName: number | string,
         target: any,
-        func?: Function,
+        func?: Function
     ) {
         for (let i = 0; i < this._listenerGroup.length; ++i) {
             let group = this._listenerGroup[i];
@@ -381,7 +381,7 @@ export let onEvent = function (
     eventName: number | string,
     target: any,
     func: Function,
-    priority: number = 0,
+    priority: number = 0
 ) {
     EventManager.Inst.addListener(eventName, target, func, priority);
 };
@@ -398,7 +398,7 @@ export let onEvent = function (
 export let offEvent = function (
     nameOrTarget: (number | string) | any,
     target?: any,
-    func?: Function,
+    func?: Function
 ) {
     if (target != null) {
         EventManager.Inst.removeListener(nameOrTarget, target, func);

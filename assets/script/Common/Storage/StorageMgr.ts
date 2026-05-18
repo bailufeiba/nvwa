@@ -1,7 +1,6 @@
 import { EventName } from "../../Game/EventID";
 import { emitEvent, onEvent } from "../EventManager";
 import { Singleton } from "../Singleton";
-import { EStorageKey } from "../../Game/StorageKey";
 
 /**
  * 本地存储
@@ -9,31 +8,31 @@ import { EStorageKey } from "../../Game/StorageKey";
  * 核心接口:
  *
  * 读取数据
- * getData( key: EStorageKey, defaultData : any = null, isSysData: boolean = false ) : any
+ * getData( key: string, defaultData : any = null, isSysData: boolean = false ) : any
  *
  * 存储数据
- * setData( key: EStorageKey, data: any, isSysData: boolean = false, flush: boolean = false ) : void
+ * setData( key: string, data: any, isSysData: boolean = false, flush: boolean = false ) : void
  *
  * 删除数据
- * removeData( key: EStorageKey, isSysData: boolean = false ) : void
+ * removeData( key: string, isSysData: boolean = false ) : void
  *
  * 读取系统数据
- * getSysData( key: EStorageKey, defaultData : any = null ) : any
+ * getSysData( key: string, defaultData : any = null ) : any
  *
  * 存储系统数据
- * setSysData( key: EStorageKey, data: any, flush: boolean = false ) : void
+ * setSysData( key: string, data: any, flush: boolean = false ) : void
  *
  * 删除系统数据
- * removeSysData( key: EStorageKey ) : void
+ * removeSysData( key: string ) : void
  *
  * 读取用户数据
- * getUserData( key: EStorageKey, defaultData : any = null ) : any
+ * getUserData( key: string, defaultData : any = null ) : any
  *
  * 存储用户数据
- * setUserData( key: EStorageKey, data: any, flush: boolean = false ) : void
+ * setUserData( key: string, data: any, flush: boolean = false ) : void
  *
  * 删除用户数据
- * removeUserData( key: EStorageKey ) : void
+ * removeUserData( key: string ) : void
  *
  * 写出数据
  * flush(): void
@@ -82,7 +81,7 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
      * @param key 存储key
      * @param defaultData   默认返回
      */
-    public getSysData(key: EStorageKey, defaultData: any = null): any {
+    public getSysData(key: string, defaultData: any = null): any {
         const self: StorageMgr = this;
         self.initSysData();
         return self._sysData[key] || defaultData;
@@ -94,11 +93,7 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
      * @param data 存储数据
      * @param flush 是否立即写出
      */
-    public setSysData(
-        key: EStorageKey,
-        data: any,
-        flush: boolean = false,
-    ): void {
+    public setSysData(key: string, data: any, flush: boolean = false): void {
         const self: StorageMgr = this;
         self.initSysData();
         self._sysData[key] = data;
@@ -111,7 +106,7 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
      * 删除系统数据
      * @param key 存储Key
      */
-    public removeSysData(key: EStorageKey): void {
+    public removeSysData(key: string): void {
         const self: StorageMgr = this;
         delete self._sysData[key];
         self.flush();
@@ -152,7 +147,7 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
             console.warn(`StorageMgr: initUserData failed, userId is empty`);
         } else {
             console.log(
-                `StorageMgr: initUserData, userId = ${self._curUserID}`,
+                `StorageMgr: initUserData, userId = ${self._curUserID}`
             );
         }
 
@@ -173,7 +168,7 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
      * @param defaultData 默认返回
      * @returns 获得数据 或者 默认返回
      */
-    public getUserData(key: EStorageKey, defaultData: any = null): any {
+    public getUserData(key: string, defaultData: any = null): any {
         const self: StorageMgr = this;
         self.initUserData();
         return self._curUserData[key] || defaultData;
@@ -185,11 +180,7 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
      * @param data 存储数据
      * @param flush 是否立即写出
      */
-    public setUserData(
-        key: EStorageKey,
-        data: any,
-        flush: boolean = false,
-    ): void {
+    public setUserData(key: string, data: any, flush: boolean = false): void {
         const self: StorageMgr = this;
         self.initUserData();
         self._curUserData[key] = data;
@@ -204,7 +195,7 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
      * 删除用户数据
      * @param key 存储Key值
      */
-    public removeUserData(key: EStorageKey): void {
+    public removeUserData(key: string): void {
         const self: StorageMgr = this;
         if (self._curUserData == null) return;
         delete self._curUserData[key];
@@ -212,9 +203,9 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
     }
 
     public getData(
-        key: EStorageKey,
+        key: string,
         defaultData: any = null,
-        isSysData: boolean = false,
+        isSysData: boolean = false
     ): any {
         const self: StorageMgr = this;
         if (isSysData) {
@@ -225,10 +216,10 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
     }
 
     public setData(
-        key: EStorageKey,
+        key: string,
         data: any,
         isSysData: boolean = false,
-        flush: boolean = false,
+        flush: boolean = false
     ): void {
         const self: StorageMgr = this;
         if (isSysData) {
@@ -238,7 +229,7 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
         }
     }
 
-    public removeData(key: EStorageKey, isSysData: boolean = false): void {
+    public removeData(key: string, isSysData: boolean = false): void {
         const self: StorageMgr = this;
         if (isSysData) {
             self.removeSysData(key);
@@ -260,7 +251,7 @@ export default class StorageMgr extends Singleton<StorageMgr>() {
             const strUserData: string = JSON.stringify(
                 self._curUserData,
                 null,
-                2,
+                2
             );
             localStorage.setItem(`UserData_${self._curUserID}`, strUserData);
         }

@@ -34,7 +34,7 @@ export default class Utils {
                 return txt(`room_name_shangdian`);
 
             case ERoomType.ZhuFu: //祝福
-                return txt(`room_name_zhufu`);
+                return Utils.getZhuFuName(roomInfo.id!);
 
             case ERoomType.Ren: //捏人
                 return txt(`room_name_ren`);
@@ -47,7 +47,6 @@ export default class Utils {
 
             default:
                 console.warn(
-                    // eslint-disable-next-line prettier/prettier, comma-dangle
                     `Utils getRoomName type:${roomInfo.type} id:${roomInfo.id}, id2:${roomInfo.id2}, colorType:${roomInfo.colorType}`
                 );
                 return ``;
@@ -56,44 +55,44 @@ export default class Utils {
 
     public static getMonsterName(
         id: number,
-        colorType: ERoomColorType,
+        colorType: ERoomColorType
     ): string {
         switch (id) {
             case EMonsterType.YeZhu:
                 return txt(
                     `color_monster`,
                     Utils.getMonsterColorStr(colorType),
-                    txt(`monster_name_yezhu`),
+                    txt(`monster_yezhu`)
                 );
             case EMonsterType.ShiXiang:
                 return txt(
                     `color_monster`,
                     Utils.getMonsterColorStr(colorType),
-                    txt(`monster_name_shixiang`),
+                    txt(`monster_shixiang`)
                 );
             case EMonsterType.BaoJun:
                 return txt(
                     `color_monster`,
                     Utils.getMonsterColorStr(colorType),
-                    txt(`monster_name_baojun`),
+                    txt(`monster_baojun`)
                 );
             case EMonsterType.ZhuZai:
                 return txt(
                     `color_monster`,
                     Utils.getMonsterColorStr(colorType),
-                    txt(`monster_name_zhuzai`),
+                    txt(`monster_zhuzai`)
                 );
 
             case EMonsterType.ZhouWang:
-                return txt(`monster_name_zhouwang`);
+                return txt(`monster_zhouwang`);
             case EMonsterType.ChiYou:
-                return txt(`monster_name_chiyou`);
+                return txt(`monster_chiyou`);
             case EMonsterType.GongGong:
-                return txt(`monster_name_gonggong`);
+                return txt(`monster_gonggong`);
 
             default:
                 console.warn(
-                    `Utils getMonsterName id:${id} colorType:${colorType}`,
+                    `Utils getMonsterName id:${id} colorType:${colorType}`
                 );
                 return ``;
         }
@@ -141,6 +140,8 @@ export default class Utils {
 
     public static getRoomColor(colorType: ERoomColorType): Color {
         switch (colorType) {
+            case ERoomColorType.None:
+                return RoomColor.None;
             case ERoomColorType.Blue:
                 return RoomColor.Blue;
             case ERoomColorType.Red:
@@ -154,5 +155,30 @@ export default class Utils {
                 console.warn(`Utils getRoomColor colorType:${colorType}`);
                 return RoomColor.None;
         }
+    }
+
+    /**
+     * 深拷贝事件数据，避免分发重入时引用被外部修改。
+     * @param obj 原对象
+     */
+    public static clone(obj: any) {
+        if (Object.prototype.toString.call(obj) == `[object Object]`) {
+            let newObj: any = {};
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    newObj[key] = Utils.clone(obj[key]);
+                }
+            }
+            return newObj;
+        } else if (Object.prototype.toString.call(obj) == `[object Array]`) {
+            let newObj: any = [];
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    newObj[key] = Utils.clone(obj[key]);
+                }
+            }
+            return newObj;
+        }
+        return obj;
     }
 }

@@ -88,6 +88,15 @@ export class RoomInfo {
     color: Color = RoomColor.None;
 }
 
+export enum EStorageKey {
+    UserData = `UserData`,
+    Gold = `Gold`,
+    SuiPian = `SuiPian`,
+    GongPin = `GongPin`,
+    ZhuFu = `ZhuFu`,
+    ShangDian = `ShangDian`,
+}
+
 export class GongPinValue {
     type: EZhuFuType = EZhuFuType.None;
     value: number = 0;

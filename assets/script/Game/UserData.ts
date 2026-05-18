@@ -1,12 +1,12 @@
 import { Singleton } from "../Common/Singleton";
 import {
+    EStorageKey,
     ESuiPianType,
     EZhuFuType,
     GongPinValue,
     SuiPianValue,
 } from "./GameDefine";
 import StorageMgr from "../Common/Storage/StorageMgr";
-import { EStorageKey } from "./StorageKey";
 
 export class UserData extends Singleton<UserData>() {
     private _load: boolean = false;

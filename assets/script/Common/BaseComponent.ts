@@ -15,7 +15,7 @@ export class BaseComponent extends Component {
         eventName: number | string,
         target: any,
         func: Function,
-        priority: number = 0,
+        priority: number = 0
     ) {
         EventManager.Inst.addListener(eventName, target, func, priority);
     }
@@ -23,7 +23,7 @@ export class BaseComponent extends Component {
     public offEvent(
         nameOrTarget: (number | string) | any,
         target?: any,
-        func?: Function,
+        func?: Function
     ) {
         if (target != null) {
             EventManager.Inst.removeListener(nameOrTarget, target, func);

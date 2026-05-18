@@ -91,12 +91,12 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
                 (err: Error | null, bundle: AssetManager.Bundle) => {
                     if (err) {
                         console.log(
-                            `I18Mgr loadBundle ${self._currBundleName} error`,
+                            `I18Mgr loadBundle ${self._currBundleName} error`
                         );
                         console.error(err);
                         self.changeBundle(
                             EBundleName.Default,
-                            completeCallback,
+                            completeCallback
                         );
                         return;
                     }
@@ -114,7 +114,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
                         (err: Error, data: JsonAsset) => {
                             if (err) {
                                 console.error(
-                                    `I18Mgr load ${TxtMgr.url} error`,
+                                    `I18Mgr load ${TxtMgr.url} error`
                                 );
                                 console.error(err);
 
@@ -128,9 +128,9 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
                             if (completeCallback) {
                                 completeCallback(null);
                             }
-                        },
+                        }
                     );
-                },
+                }
             );
         }
     }
@@ -159,7 +159,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
     getRes(
         name: string,
         assetType: any,
-        callback: (err: Error | null, data: any) => void,
+        callback: (err: Error | null, data: any) => void
     ) {
         const self = this;
 
@@ -186,7 +186,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
                         map.set(name, data);
                     }
                     callback(err, data);
-                },
+                }
             );
         } else {
             if (self._currBundle) {
@@ -204,7 +204,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
             } else {
                 callback(
                     new Error(`${self._currBundleName}bundle is null`),
-                    null,
+                    null
                 );
             }
         }
@@ -259,9 +259,9 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
         onProgress?: (
             completedCount: number,
             totalCount: number,
-            item: any,
+            item: any
         ) => void,
-        onLoaded?: Director.OnSceneLoaded,
+        onLoaded?: Director.OnSceneLoaded
     ): void {
         const self = this;
         let loadCountTmp = 0;
@@ -269,7 +269,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
 
         if (bundle == null) {
             bundle = assetManager.bundles.find(
-                (bundle): boolean => !!bundle.getSceneInfo(sceneName),
+                (bundle): boolean => !!bundle.getSceneInfo(sceneName)
             );
         }
 
@@ -291,11 +291,11 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
                             onProgress?.(
                                 loadCountTmp + finished,
                                 totalCountTmp + total,
-                                null,
+                                null
                             );
-                        },
+                        }
                     );
-                },
+                }
             );
         } else {
             const err = `Can not preload the scene "${sceneName}" because it is not in the build settings.`;
@@ -309,7 +309,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
     loadScene(
         sceneName: string,
         onLaunched?: Director.OnSceneLaunched,
-        onUnloaded?: Director.OnUnload,
+        onUnloaded?: Director.OnUnload
     ): boolean {
         const self = this;
         const direct: any = director;
@@ -318,7 +318,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
             return false;
         }
         const bundle = assetManager.bundles.find(
-            (bundle): boolean => !!bundle.getSceneInfo(sceneName),
+            (bundle): boolean => !!bundle.getSceneInfo(sceneName)
         );
         if (bundle) {
             direct.emit(`director_before_scene_loading`, sceneName);
@@ -349,7 +349,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
     loadResByNode(
         loadNode: Node,
         loadFinishedCallback?: Function,
-        progressCallback?: Function,
+        progressCallback?: Function
     ) {
         const self = this;
         const mapResInfo = self.getAllResInfoInNode(loadNode);
@@ -359,7 +359,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
     loadResByPrefab(
         prefab: Prefab,
         loadFinishedCallback?: Function,
-        progressCallback?: Function,
+        progressCallback?: Function
     ) {
         const self = this;
         let mapResInfo = this.getAllResInfoInPrefab(prefab);
@@ -369,7 +369,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
     loadResByUrls(
         mapResInfo: Map<EI18AssetType, string[]>,
         loadFinishedCallback?: Function,
-        progressCallback?: Function,
+        progressCallback?: Function
     ) {
         if (mapResInfo.size == 0) {
             if (loadFinishedCallback) {
@@ -469,14 +469,14 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
                         if (objTmp instanceof Prefab) {
                             self.mergeResInfo(
                                 mapResInfo,
-                                self.getAllResInfoInPrefab(objTmp)!,
+                                self.getAllResInfoInPrefab(objTmp)!
                             );
                         }
                     }
                 } else if (obj instanceof Prefab) {
                     self.mergeResInfo(
                         mapResInfo,
-                        self.getAllResInfoInPrefab(obj)!,
+                        self.getAllResInfoInPrefab(obj)!
                     );
                 }
             }
@@ -492,7 +492,7 @@ export default class I18Mgr extends Singleton<I18Mgr>() {
 
     mergeResInfo(
         mainResInfo: Map<EI18AssetType, Array<string>>,
-        addResInfo: Map<EI18AssetType, Array<string>>,
+        addResInfo: Map<EI18AssetType, Array<string>>
     ) {
         addResInfo.forEach((urls, type) => {
             const mainUrls = mainResInfo.get(type);

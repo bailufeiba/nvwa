@@ -7,7 +7,7 @@ export default class I18SpriteTool {
     static changeI18SpriteFrame(
         sprite: Sprite,
         spriteFrame: SpriteFrame,
-        callback?: Function,
+        callback?: Function
     ) {
         const i18 = sprite.node.getComponent(I18Cmpt);
         if (i18 == null) {
@@ -25,7 +25,7 @@ export default class I18SpriteTool {
         sprite: Sprite,
         url: string,
         defaultSpriteFrame?: SpriteFrame,
-        callback?: Function,
+        callback?: Function
     ) {
         I18Mgr.Inst.getRes(
             `${url}/spriteFrame`,
@@ -44,7 +44,7 @@ export default class I18SpriteTool {
                 if (callback) {
                     callback();
                 }
-            },
+            }
         );
     }
 }

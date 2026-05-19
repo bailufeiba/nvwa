@@ -6,7 +6,7 @@ import {
     ERoomType,
     EZhuFuType,
     RoomColor,
-    RoomInfo,
+    RoomInfo
 } from "./GameDefine";
 
 export default class Utils {

@@ -5,7 +5,7 @@ import {
     ERoomType,
     ESuiPianType,
     EZhuFuType,
-    RoomInfo,
+    RoomInfo
 } from "../GameDefine";
 import { UserData } from "../UserData";
 import Utils from "../Utils";
@@ -314,7 +314,7 @@ export default class MapBuilder extends Singleton<MapBuilder>() {
             ESuiPianType.ChangQin,
             ESuiPianType.ShaoHao,
             ESuiPianType.TaiYi,
-            ESuiPianType.JiGong,
+            ESuiPianType.JiGong
         ];
         const idx = Math.floor(Math.random() * allSuiPian.length);
         return allSuiPian[idx];

@@ -1,21 +1,14 @@
-import {
-    _decorator,
-    Component,
-    isValid,
-    Label,
-    resources,
-    Sprite,
-    SpriteFrame,
-} from "cc";
+import { _decorator, isValid, Label, resources, Sprite, SpriteFrame } from "cc";
 import { ERoomType, RoomInfo } from "../GameDefine";
 import ResPath from "../ResPath";
 import Utils from "../Utils";
 import AttrBuilder from "./AttrBuilder";
 import GameData from "../GameData";
+import { BaseComponent } from "../../Common/BaseComponent";
 
 const { ccclass, property } = _decorator;
 @ccclass(`Room`)
-export class Room extends Component {
+export class Room extends BaseComponent {
     @property({ type: Sprite, visible: true })
     _bg: Sprite | null = null;
 

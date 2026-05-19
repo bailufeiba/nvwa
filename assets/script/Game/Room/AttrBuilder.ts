@@ -16,7 +16,7 @@ export default class AttrBuilder extends Singleton<AttrBuilder>() {
         { type: EMonsterType.BaoJun, hp: 20, attack: 10 },
         { type: EMonsterType.ZhouWang, hp: 1500, attack: 20 },
         { type: EMonsterType.ChiYou, hp: 3000, attack: 50 },
-        { type: EMonsterType.GongGong, hp: 6000, attack: 100 },
+        { type: EMonsterType.GongGong, hp: 6000, attack: 100 }
     ];
 
     //根据怪物类型、层数和难度获得怪物属性

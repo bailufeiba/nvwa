@@ -13,7 +13,7 @@ import {
     Sprite,
     SpriteFrame,
     sys,
-    warnID,
+    warnID
 } from "cc";
 import { sp } from "cc";
 import { Asset } from "cc";

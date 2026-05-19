@@ -5,5 +5,5 @@ export enum EventName {
     STORAGE_UPDATE, //存储数据更新
 
     StartGame, //开始游戏
-    CloseView, //关闭界面
+    CloseView //关闭界面
 }

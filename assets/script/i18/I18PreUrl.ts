@@ -6,7 +6,7 @@ const { ccclass, property } = _decorator;
 export enum EI18AssetType {
     SpriteFrame,
     SkeletonData,
-    SpriteAtlas,
+    SpriteAtlas
 }
 
 @ccclass(`I18UrlInfo`)

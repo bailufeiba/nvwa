@@ -5,7 +5,7 @@ import {
     RichText,
     sp,
     Sprite,
-    SpriteFrame,
+    SpriteFrame
 } from "cc";
 import { SpriteAtlas } from "cc";
 
@@ -35,7 +35,7 @@ export class I18Cmpt extends Component {
 
     @property({
         visible: true,
-        tooltip: `是否自动刷新\n如果代码控制显示内容,则为false`,
+        tooltip: `是否自动刷新\n如果代码控制显示内容,则为false`
     })
     _refresh = true;
 

@@ -19,7 +19,7 @@ export class I18CmptPropertyBase extends Component {
 
     @property({
         visible: true,
-        tooltip: `如需等待I18Cmpt更改后生效,请勾选.\n如需更改语言后立即生效,取消勾选`,
+        tooltip: `如需等待I18Cmpt更改后生效,请勾选.\n如需更改语言后立即生效,取消勾选`
     })
     _waitChange: boolean = false;
 
@@ -60,7 +60,7 @@ export class I18CmptPropertyBase extends Component {
 
     onChangeProperty(proty: I18PropertyBase) {
         console.warn(
-            `I18CmptPropertyBase onChangeProperty please overwrite this func !`,
+            `I18CmptPropertyBase onChangeProperty please overwrite this func !`
         );
     }
 

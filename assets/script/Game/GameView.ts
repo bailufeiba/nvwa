@@ -4,15 +4,19 @@ import { BaseView } from "../Common/BaseView";
 import MapBuilder from "./Room/MapBuilder";
 import { Room } from "./Room/Room";
 import GameData from "./GameData";
+import Humen from "./Room/Humen";
 
 const { ccclass, property } = _decorator;
 @ccclass(`GameView`)
 export default class GameView extends BaseView {
-    @property({ type: LouTi, visible: true })
-    _louTi: LouTi | null = null;
+    @property({ type: Humen, visible: true })
+    _humen: Humen | null = null;
 
     @property({ type: Room, visible: true })
     _room: Room[] = [];
+
+    @property({ type: LouTi, visible: true })
+    _louTi: LouTi | null = null;
 
     protected start(): void {
         const self = this;
@@ -23,6 +27,8 @@ export default class GameView extends BaseView {
 
     public initRoom() {
         const self = this;
+
+        self._humen!.enterRoom();
 
         const map = MapBuilder.Inst.getMap(GameData.Inst.floor);
         console.log(`map: `, map);

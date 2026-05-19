@@ -12,7 +12,7 @@ export let RoomRate = {
     BlueShiXiang: [1351, 1100, 1351],
     RedShiXiang: [1351, 1100, 1351],
     GrayBaoJun: [1351, 900, 1351],
-    GrayZhuZai: [1351, 900, 1351],
+    GrayZhuZai: [1351, 900, 1351]
 
     // ZhuFu: [0, 0, 0],
     // ShangDian: [0, 0, 0],

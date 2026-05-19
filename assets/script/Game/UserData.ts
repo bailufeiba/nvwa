@@ -4,17 +4,27 @@ import {
     ESuiPianType,
     EZhuFuType,
     GongPinValue,
-    SuiPianValue,
+    SuiPianValue
 } from "./GameDefine";
 import StorageMgr from "../Common/Storage/StorageMgr";
 
 export class UserData extends Singleton<UserData>() {
     private _load: boolean = false;
 
-    private _gold: number = 0;
     private _gongPin: number = 0;
     private _arrZhuFu: Array<GongPinValue> = [];
     private _arrSuiPian: Array<SuiPianValue> = [];
+
+    private _hp: number = 100; //当前HP
+    private _attack: number = 10; //当前攻击力
+    private _huifu: number = 0; //恢复
+    private _fuhuo: number = 0; //复活
+    private _baoji: number = 0; //暴击
+    private _baojilv: number = 0; //暴击率
+    private _gold: number = 0; //金币
+    private _lv: number = 1; //等级
+    private _exp: number = 0; //经验
+    private _gongpin: number = 0; //贡品
 
     constructor() {
         super();
@@ -48,6 +58,22 @@ export class UserData extends Singleton<UserData>() {
         if (!self.loadSuiPian()) {
             self.initSuiPian();
         }
+    }
+
+    public get hp() {
+        return this._hp;
+    }
+
+    public set hp(value: number) {
+        this._hp = value;
+    }
+
+    public get attack() {
+        return this._attack;
+    }
+
+    public set attack(value: number) {
+        this._attack = value;
     }
 
     public get gongPin() {
@@ -95,6 +121,11 @@ export class UserData extends Singleton<UserData>() {
             }
         }
         return 0;
+    }
+
+    public getZhuFuCount() {
+        const self = this;
+        return self._arrZhuFu.length;
     }
 
     public setZhuFu(type: EZhuFuType, value: number) {
@@ -202,6 +233,11 @@ export class UserData extends Singleton<UserData>() {
             }
         }
         return 0;
+    }
+
+    public getSuiPianCount() {
+        const self = this;
+        return self._arrSuiPian.length;
     }
 
     public setSuiPian(type: ESuiPianType, value: number) {

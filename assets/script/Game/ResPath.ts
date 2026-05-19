@@ -26,7 +26,7 @@ export let ResDefine = {
     Shen_QingLong: `icon/shen_qinglong`,
     Shen_BaiHu: `icon/shen_baihu`,
     Shen_ZhuQue: `icon/shen_zhuque`,
-    Shen_XuanWu: `icon/shen_xuanwu`,
+    Shen_XuanWu: `icon/shen_xuanwu`
 };
 
 export default class ResPath {

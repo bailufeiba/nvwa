@@ -10,7 +10,7 @@ export enum ERoomType {
     ShangDian, //商店
     GuaiWu, //野怪
     ZhuFu, //祝福
-    Ren, //人
+    Ren //人
 }
 
 export enum EMonsterType {
@@ -22,7 +22,7 @@ export enum EMonsterType {
 
     ZhouWang, //纣王
     ChiYou, //蚩尤
-    GongGong, //共工
+    GongGong //共工
 }
 
 export enum EZhuFuType {
@@ -34,7 +34,7 @@ export enum EZhuFuType {
     QingLong, //青龙
     BaiHu, //白虎
     ZhuQue, //朱雀
-    XuanWu, //玄武
+    XuanWu //玄武
 }
 
 export enum ESuiPianType {
@@ -45,7 +45,7 @@ export enum ESuiPianType {
     ChangQin, //长琴
     ShaoHao, //少昊
     TaiYi, //太乙
-    JiGong, //济公
+    JiGong //济公
 }
 
 export enum EAttrType {
@@ -60,7 +60,7 @@ export enum EAttrType {
     SuiPian, //碎片
     ZhuFu, //祝福
     JinBi, //金币
-    JingYan, //经验
+    JingYan //经验
 }
 
 export enum ERoomColorType {
@@ -68,7 +68,7 @@ export enum ERoomColorType {
     Blue, //蔚蓝
     Red, //猩红
     Gray, //暗影
-    Yellow, //奖励
+    Yellow //奖励
 }
 
 export const RoomColor = {
@@ -76,7 +76,7 @@ export const RoomColor = {
     Blue: color(176, 221, 240, 255),
     Red: color(250, 217, 212, 255),
     Gray: color(220, 220, 220, 255),
-    Yellow: color(255, 242, 205, 255),
+    Yellow: color(255, 242, 205, 255)
 };
 
 export class RoomInfo {
@@ -94,7 +94,11 @@ export enum EStorageKey {
     SuiPian = `SuiPian`,
     GongPin = `GongPin`,
     ZhuFu = `ZhuFu`,
-    ShangDian = `ShangDian`,
+    ShangDian = `ShangDian`
+}
+
+export class GameConst {
+    public static readonly maxFloor: number = 300;
 }
 
 export class GongPinValue {
